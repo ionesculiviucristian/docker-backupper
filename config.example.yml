@@ -1,0 +1,94 @@
+cleaning_interval: 7
+container_types:
+  gitlab:
+    storage_path: "~/Backups/docker/local/gitlab"
+  minio:
+    storage_path: "~/Backups/docker/local/minio"
+  mongo:
+    storage_path: "~/Backups/docker/local/mongo"
+  mysql:
+    storage_path: "~/Backups/docker/local/mongo"
+  postgres:
+    storage_path: "~/Backups/docker/local/postgres"
+  rabbitmq:
+    storage_path: "~/Backups/docker/local/rabbitmq"
+containers:
+  - name: "dev-gitlab-1"
+    type: "gitlab"
+  - name: "dev-minio-1"
+    type: "minio"
+    config:
+      url: "http://minio:9000"
+      access_key: "developer"
+      secret_key: "1q2w3e4r5t6y"
+  - name: "dev-mongo-1"
+    type: "mongo"
+    config:
+      username: "1q2w3e4r5t6y"
+      password: "developer"
+  - name: "dev-mysql-1"
+    type: "mysql"
+    config:
+      username: "1q2w3e4r5t6y"
+      password: "developer"
+  - name: "dev-postgres-1"
+    type: "postgres"
+    config:
+      username: "1q2w3e4r5t6y"
+      password: "developer"
+  - name: "dev-rabbitmq-1"
+    type: "rabbitmq"
+    config:
+      volume: "dev_rabbitmq-data"
+logs:
+  level: "INFO"
+  path: "/tmp"
+mirrors:
+  ftp:
+    - host: "ftp.localdev"
+      config:
+        username: "developer"
+        password: "1q2w3e4r5t6y"
+        port: 22
+      cleaning_interval: 30
+      storage_path: "/Backups/docker/ftp"
+  rsync:
+    - host: "rsync.localdev"
+      config:
+        username: "developer"
+      cleaning_interval: 15
+      storage_path: "/Backups/docker/rsync"
+mounts:
+  storage_path: "~/Backups/docker/local/mounts"
+  binds:
+    containers:
+      - name: "container-1"
+        paths:
+          - name: "bm11"
+            path: "/path/to/bind-mount-1-1"
+      - name: "container-2"
+        paths:
+          - name: "bm21"
+            path: "/path/to/bind-mount-2-1"
+          - name: "bm22"
+            path: "/path/to/bind-mount-2-2"
+  volumes:
+    - "dev_postgres-data"
+    - "dev_mongo-data"
+    - "dev_mysql-data"
+notifiers:
+  email:
+    active: true
+    from_: ""
+    recipients:
+      - "developer@mailpit.localdev"
+    smtp:
+      host: "smtp.gmail.com"
+      username: ""
+      password: ""
+      port: 465
+  mattermost:
+    active: true
+    api_url: "https://mattermost.localdev/api/v4"
+    channel: "backups"
+    token: ""

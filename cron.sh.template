@@ -1,0 +1,5 @@
+#!/bin/bash
+source /mnt/backups/backups/.venv/bin/activate
+cd /mnt/backups/backups
+python main.py
+deactivate

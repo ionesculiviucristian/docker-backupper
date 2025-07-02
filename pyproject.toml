@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "backups"
+version = "0.1.0"
+description = ""
+authors = ["liviu <liviu.ionescu@uvision.ro>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+docker = "^6.1.3"
+python-dotenv = "^1.0.0"
+tqdm = "^4.66.1"
+click = "^8.1.7"
+pyyaml = "^6.0.2"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.16.1"
+types-docker = "^7.1.0.20250523"
+types-tqdm = "^4.67.0.20250516"
+types-pyyaml = "^6.0.12.20250516"
+
+[tool.mypy]
+python_version = "3.13"
+check_untyped_defs = true
+disallow_untyped_defs = true
+warn_unused_ignores = false
+warn_return_any = true
+strict = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
