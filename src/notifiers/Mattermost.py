@@ -22,7 +22,7 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
         try:
             page = 1
             while True:
-                self.log_manager.info(f"Deleting posts from page {page}")
+                self.log_manager.info(f"Reading posts from page {page}")
 
                 posts = self.__get_posts(page, 100)
 
