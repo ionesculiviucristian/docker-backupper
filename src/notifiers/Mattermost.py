@@ -20,7 +20,7 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
 
     def clear_messages(self) -> bool:
         try:
-            page = 1
+            page = 0
             while True:
                 self.log_manager.info(f"Reading posts from page {page}")
 
@@ -118,5 +118,5 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
 
     def __is_post_deletable(self, created_at: int) -> bool:
         now = int(time.time() * 1000)
-        post_age = (now - created_at) / 24 * 60 * 60 * 1000
+        post_age = (now - created_at) / (24 * 60 * 60 * 1000)
         return post_age > self.config["retention_days"]
