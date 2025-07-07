@@ -9,15 +9,12 @@ from src.mirrors.Mirror import Mirror
 from src.typehints import TypeConfigMirrorFTP
 
 
-class FTP(Mirror):
-    app: App
+class FTP(Mirror[TypeConfigMirrorFTP]):
     client: FTPlib
-    config: TypeConfigMirrorFTP
 
     def __init__(self, app: App, config: TypeConfigMirrorFTP) -> None:
-        self.app = app
+        super().__init__(app, config)
         self.client = FTPlib()
-        self.config = config
 
     def connect(self) -> None:
         self.client.connect(self.config["host"], int(self.config["config"]["port"]))

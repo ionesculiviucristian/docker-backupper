@@ -26,8 +26,8 @@ class NotifyManager:
         self.helpers = helpers
         self.log_manager = log_manager
 
-        self.email = Email(self.config, self.log_manager, self.helpers)
-        self.mattermost = Mattermost(self.config, self.log_manager, self.helpers)
+        self.email = Email(self.config["notifiers"]["email"], self.log_manager, self.helpers)
+        self.mattermost = Mattermost(self.config["notifiers"]["mattermost"], self.log_manager, self.helpers)
 
     def send_action(self, message: str, padded: bool = False) -> None:
         self.log_manager.info(message)

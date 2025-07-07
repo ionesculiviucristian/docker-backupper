@@ -5,14 +5,11 @@ from src.mirrors.Mirror import Mirror
 from src.typehints import TypeConfigMirrorRSync
 
 
-class RSync(Mirror):
-    app: App
-    config: TypeConfigMirrorRSync
+class RSync(Mirror[TypeConfigMirrorRSync]):
     ssh_login: str
 
     def __init__(self, app: App, config: TypeConfigMirrorRSync) -> None:
-        self.app = app
-        self.config = config
+        super().__init__(app, config)
         self.ssh_login = f"{self.config['config']['username']}@{self.config['host']}"
 
     def connect(self) -> None:

@@ -1,19 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Tuple, TypedDict
+from typing import Callable, Generic, Tuple, TypedDict, TypeVar
 
 from src.loggers.LogManager import LogManager
-from src.typehints import TypeConfig
+
+TypeConfigNotifier = TypeVar("TypeConfigNotifier")
 
 
 class TypeContructorHelpersParam(TypedDict):
     get_external_ip: Callable[[], Tuple[str, str]]
 
 
-class Notifier(ABC):
-    config: TypeConfig
+class Notifier(ABC, Generic[TypeConfigNotifier]):
+    config: TypeConfigNotifier
     log_manager: LogManager
 
-    def __init__(self, config: TypeConfig, log_manager: LogManager, helpers: TypeContructorHelpersParam):
+    def __init__(self, config: TypeConfigNotifier, log_manager: LogManager, helpers: TypeContructorHelpersParam):
         self.config = config
         self.log_manager = log_manager
         self.helpers = helpers

@@ -1,4 +1,4 @@
-cleaning_interval: 7
+retention_days: 7
 container_types:
   gitlab:
     storage_path: "~/Backups/docker/local/gitlab"
@@ -50,13 +50,13 @@ mirrors:
         username: "developer"
         password: "1q2w3e4r5t6y"
         port: 22
-      cleaning_interval: 30
+      retention_days: 30
       storage_path: "/Backups/docker/ftp"
   rsync:
     - host: "rsync.localdev"
       config:
         username: "developer"
-      cleaning_interval: 15
+      retention_days: 15
       storage_path: "/Backups/docker/rsync"
 mounts:
   storage_path: "~/Backups/docker/local/mounts"
@@ -91,4 +91,5 @@ notifiers:
     active: true
     api_url: "https://mattermost.localdev/api/v4"
     channel: "backups"
+    retention_days: 3
     token: ""

@@ -19,6 +19,7 @@ class TypeConfigNotifierMattermost(TypedDict):
     active: bool
     api_url: str
     channel: str
+    retention_days: int
     token: str
 
 
@@ -56,7 +57,7 @@ class TypeConfigMirrorFTPConfig(TypedDict):
 class TypeConfigMirrorFTP(TypedDict):
     host: str
     config: TypeConfigMirrorFTPConfig
-    cleaning_interval: int
+    retention_days: int
     storage_path: str
 
 
@@ -67,7 +68,7 @@ class TypeConfigMirrorRSyncConfig(TypedDict):
 class TypeConfigMirrorRSync(TypedDict):
     host: str
     config: TypeConfigMirrorRSyncConfig
-    cleaning_interval: int
+    retention_days: int
     storage_path: str
 
 
@@ -152,7 +153,7 @@ class TypeConfigContainerTypes(TypedDict):
 
 
 class TypeConfig(TypedDict):
-    cleaning_interval: int
+    retention_days: int
     containers: List[TypeConfigContainers]
     container_types: TypeConfigContainerTypes
     logs: TypeConfigLogs

@@ -7,12 +7,11 @@ from src.typehints import TypeConfig
 
 
 class FileLogger(Logger):
-    config: TypeConfig
     log_path: str
     logger: logging.Logger
 
     def __init__(self, config: TypeConfig) -> None:
-        self.config = config
+        super().__init__(config)
         self.log_path = os.path.join(
             self.config["logs"]["path"], f"log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
         )

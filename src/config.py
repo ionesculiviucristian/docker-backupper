@@ -27,7 +27,7 @@ def merge_configs(default: TypeConfig, override: TypeConfig) -> TypeConfig:
 
 
 default_config: TypeConfig = {
-    "cleaning_interval": 7,
+    "retention_days": 7,
     "container_types": {
         "gitlab": {"storage_path": ""},
         "minio": {"storage_path": ""},
@@ -51,6 +51,7 @@ default_config: TypeConfig = {
             "active": False,
             "api_url": "",
             "channel": "",
+            "retention_days": 3,
             "token": "",
         },
     },

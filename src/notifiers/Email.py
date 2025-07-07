@@ -2,9 +2,10 @@ import smtplib
 from email.message import EmailMessage
 
 from src.notifiers.Notifier import Notifier
+from src.typehints import TypeConfigNotifierEmail
 
 
-class Email(Notifier):
+class Email(Notifier[TypeConfigNotifierEmail]):
     def send_log_file(self, path: str) -> bool:
         return True
 
@@ -14,17 +15,17 @@ class Email(Notifier):
 
             msg = EmailMessage()
             msg["Subject"] = f"Backup errors on {hostname} {external_ip}"
-            msg["From"] = self.config["notifiers"]["email"]["from_"]
-            msg["To"] = ", ".join(self.config["notifiers"]["email"]["recipients"])
+            msg["From"] = self.config["from_"]
+            msg["To"] = ", ".join(self.config["recipients"])
             msg.set_content(message)
 
             with smtplib.SMTP_SSL(
-                self.config["notifiers"]["email"]["smtp"]["host"],
-                self.config["notifiers"]["email"]["smtp"]["port"],
+                self.config["smtp"]["host"],
+                self.config["smtp"]["port"],
             ) as smtp:
                 smtp.login(
-                    self.config["notifiers"]["email"]["smtp"]["username"],
-                    self.config["notifiers"]["email"]["smtp"]["password"],
+                    self.config["smtp"]["username"],
+                    self.config["smtp"]["password"],
                 )
                 smtp.send_message(msg)
             return True

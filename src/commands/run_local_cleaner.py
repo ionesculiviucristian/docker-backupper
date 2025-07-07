@@ -9,7 +9,7 @@ def run_local_cleaner(paths: List[str]) -> None:
         f"Started local cleaning at {app.get_current_datetime()} on {app.hostname} {app.external_ip}"
     )
 
-    cleaner = LocalCleaner(app)
+    cleaner = LocalCleaner(app, app.config)
 
     for path in paths:
         cleaner.add_path(path)

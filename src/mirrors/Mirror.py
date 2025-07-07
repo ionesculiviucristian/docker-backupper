@@ -1,14 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Generic, List, TypeVar
 
 from src.App import App
 
+TypeConfigMirror = TypeVar("TypeConfigMirror")
 
-class Mirror(ABC):
+
+class Mirror(ABC, Generic[TypeConfigMirror]):
     app: App
+    config: TypeConfigMirror
 
-    def __init__(self, app: App):
+    def __init__(self, app: App, config: TypeConfigMirror):
         self.app = app
+        self.config = config
 
     @abstractmethod
     def connect(self) -> None:

@@ -3,28 +3,28 @@ from typing import List, Optional, Tuple
 
 from src.App import App
 from src.cleaners.Cleaner import Cleaner
+from src.typehints import TypeConfig
 
 
-class LocalCleaner(Cleaner):
-    app: App
+class LocalCleaner(Cleaner[TypeConfig]):
     paths: List[Tuple[str, int]]
 
-    def __init__(self, app: App) -> None:
-        self.app = app
+    def __init__(self, app: App, config: TypeConfig) -> None:
+        super().__init__(app, config)
         self.paths = []
 
-    def add_path(self, path: str, time_to_keep: Optional[int] = None) -> None:
-        self.paths.append((path, time_to_keep if time_to_keep else self.app.config["cleaning_interval"]))
+    def add_path(self, path: str, retention_days: Optional[int] = None) -> None:
+        self.paths.append((path, retention_days if retention_days else self.config["retention_days"]))
 
     def run(self) -> None:
         if len(self.paths) == 0:
             self.app.notify_manager.send_warning("No paths set when running local cleaning", True)
             return
 
-        for path, time_to_keep in self.paths:
-            self.__remove_backups(path, time_to_keep)
+        for path, retention_days in self.paths:
+            self.__remove_backups(path, retention_days)
 
-    def __get_removable_folders(self, path: str, time_to_keep: int) -> List[str]:
+    def __get_removable_folders(self, path: str, retention_days: int) -> List[str]:
         folders: List[str] = []
 
         if os.path.exists(path):
@@ -34,16 +34,16 @@ class LocalCleaner(Cleaner):
                 if os.path.isdir(folder_path):
                     folders.append(folder_path)
 
-        return self.get_removable_folders(path, folders, time_to_keep)
+        return self.get_removable_folders(path, folders, retention_days)
 
-    def __remove_backups(self, path: str, time_to_keep: int) -> None:
-        removable_paths = self.__get_removable_folders(path, time_to_keep)
+    def __remove_backups(self, path: str, retention_days: int) -> None:
+        removable_paths = self.__get_removable_folders(path, retention_days)
 
         if len(removable_paths) == 0:
-            self.app.notify_manager.send_action(f"No backups older than {time_to_keep} days found in {path}", True)
+            self.app.notify_manager.send_action(f"No backups older than {retention_days} days found in {path}", True)
             return
 
-        self.app.notify_manager.send_action(f"Removing backups older than {time_to_keep} days from {path}", True)
+        self.app.notify_manager.send_action(f"Removing backups older than {retention_days} days from {path}", True)
 
         for removable_path in removable_paths:
             try:
