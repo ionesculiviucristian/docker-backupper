@@ -91,10 +91,10 @@ class Backupper(ABC, Generic[T]):
     @staticmethod
     def run_backupper(
         app: App,
-        ftp: bool,
         ftp_only: bool,
-        rsync: bool,
+        ftp: bool,
         rsync_only: bool,
+        rsync: bool,
         backupper: "Backupper[T]" | List["Backupper[T]"],
     ) -> None:
         backuppers = backupper if isinstance(backupper, List) else [backupper]
