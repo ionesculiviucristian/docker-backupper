@@ -26,13 +26,13 @@ def gitlab(
     rsync_only: bool,
     rsync: bool,
 ) -> None:
-    if clean_only:
-        return run_local_cleaner([GitLab(app).config["local_storage_path"]])
-
-    if ftp_clean_only:
-        return run_ftp_cleaner([GitLab(app).config["mirror_storage_path"]])
-
-    if rsync_clean_only:
-        return run_rsync_cleaner([GitLab(app).config["mirror_storage_path"]])
+    if clean_only or ftp_clean_only or rsync_clean_only:
+        if clean_only:
+            run_local_cleaner([GitLab(app).config["local_storage_path"]])
+        if ftp_clean_only:
+            run_ftp_cleaner([GitLab(app).config["mirror_storage_path"]])
+        if rsync_clean_only:
+            run_rsync_cleaner([GitLab(app).config["mirror_storage_path"]])
+        return
 
     return Backupper[TypeConfigContainerGitlab].run_backupper(app, ftp_only, ftp, rsync_only, rsync, GitLab(app))
