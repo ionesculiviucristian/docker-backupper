@@ -27,6 +27,8 @@ class Redis(Backupper[TypeConfigContainerRedis]):
         def callback(container: TypeConfigContainerRedis, docker_container: Container, backup_path: str) -> bool:
             has_errors = False
 
+            self.app.notify_manager.send_info(f"Starting backup for {container['name']} container", True)
+
             try:
                 self.__export_container_database(container, docker_container, backup_path)
                 self.app.notify_manager.send_success(f"{self.subject}: backed up successfully", True)
