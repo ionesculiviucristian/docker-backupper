@@ -29,10 +29,8 @@ class LocalCleaner(Cleaner[TypeConfig]):
 
         if os.path.exists(path):
             for folder in os.listdir(path):
-                folder_path = os.path.join(path, folder)
-
-                if os.path.isdir(folder_path):
-                    folders.append(folder_path)
+                if os.path.isdir(os.path.join(path, folder)):
+                    folders.append(folder)
 
         return self.get_removable_folders(path, folders, retention_days)
 
