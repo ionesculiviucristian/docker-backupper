@@ -15,7 +15,7 @@ class TypeDockerContainersPruneResult(TypedDict):
 
 
 class TypeDockerImagesPruneResult(TypedDict):
-    ImagesDeleted: List[Dict[Literal["Deleted"], str]] | None
+    ImagesDeleted: List[Dict[Literal["Deleted"] | Literal["Untagged"], str]] | None
     SpaceReclaimed: int
 
 
