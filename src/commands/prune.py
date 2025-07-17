@@ -24,7 +24,7 @@ def prune() -> None:
         app.log_manager.debug(str(result))
 
         app.notify_manager.send_action("Pruning images")
-        result = cast(TypeDockerImagesPruneResult, docker.client.images.prune())  # type: ignore
+        result = cast(TypeDockerImagesPruneResult, docker.client.images.prune(filters={"dangling": False}))  # type: ignore # noqa
         app.log_manager.debug(str(result))
 
         app.notify_manager.send_action("Pruning networks")
