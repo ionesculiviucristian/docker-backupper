@@ -19,19 +19,19 @@ def prune() -> None:
             f"Started pruning docker at {app.get_current_datetime()} from {app.hostname} {app.external_ip}"  # noqa
         )
 
-        app.notify_manager.send_time("Pruning containers")
+        app.notify_manager.send_action("Pruning containers")
         result = cast(TypeDockerContainersPruneResult, docker.client.containers.prune())  # type: ignore
         app.log_manager.debug(str(result))
 
-        app.notify_manager.send_time("Pruning images")
+        app.notify_manager.send_action("Pruning images")
         result = cast(TypeDockerImagesPruneResult, docker.client.images.prune())  # type: ignore
         app.log_manager.debug(str(result))
 
-        app.notify_manager.send_time("Pruning networks")
+        app.notify_manager.send_action("Pruning networks")
         result = cast(TypeDockerNetworksPruneResult, docker.client.networks.prune())  # type: ignore
         app.log_manager.debug(str(result))
 
-        app.notify_manager.send_time("Pruning volumes")
+        app.notify_manager.send_action("Pruning volumes")
         result = cast(TypeDockerVolumesPruneResult, docker.client.volumes.prune())  # type: ignore
         app.log_manager.debug(str(result))
 
