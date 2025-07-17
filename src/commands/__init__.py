@@ -7,6 +7,7 @@ from .mongo import mongo
 from .mount import mount
 from .mysql import mysql
 from .postgres import postgres
+from .prune import prune
 from .rabbitmq import rabbitmq
 from .redis import redis
 from .rsync_backup import rsync_backup
@@ -24,6 +25,7 @@ __all__ = [
     "mount",
     "mysql",
     "postgres",
+    "prune",
     "rabbitmq",
     "redis",
     "rsync_backup",

@@ -53,7 +53,7 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
                     succeeded += 1
                     self.log_manager.debug(f"Deleted post {deletable_post}")
 
-            self.log_manager.debug(f"Deleted: {succeeded} Failed: {failed}")
+            self.log_manager.debug(f"Deleted {succeeded} and failed {failed}")
 
             return {"failed": failed, "succeeded": succeeded}
         except Exception as e:
