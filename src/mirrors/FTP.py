@@ -27,7 +27,7 @@ class FTP(Mirror[TypeConfigMirrorFTP]):
 
         self.app.log_manager.debug(f"cwd {path}")
         self.client.cwd(path)
-        self.client.retrlines("LIST", lambda x: items.append(x.split()[-1]))
+        self.client.retrlines("LIST -a", lambda x: items.append(x.split()[-1]))
 
         return items
 
