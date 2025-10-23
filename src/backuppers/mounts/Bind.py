@@ -21,8 +21,11 @@ class Bind(Backupper[None]):
     def subject(self) -> str:
         return "Docker bind mounts"
 
+    def is_backup_disabled(self):
+        return len(self.app.config["mounts"]["binds"]) == 0
+
     def backup(self) -> bool:
-        if len(self.app.config["mounts"]["binds"]) == 0:
+        if self.is_backup_disabled():
             self.app.notify_manager.send_warning(
                 f"Backing up {self.subject} is disabled because no entries are defined"
             )

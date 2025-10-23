@@ -53,8 +53,11 @@ class Backupper(ABC, Generic[T]):
             [container for container in app.config["containers"] if container and container["type"] == self._type],
         )
 
+    def is_backup_disabled(self):
+        return len(self.containers) == 0
+
     def backup_service(self, callback: Callable[[T, Container, str], bool]) -> bool:
-        if len(self.containers) == 0:
+        if self.is_backup_disabled():
             self.app.notify_manager.send_warning(
                 f"Backing up {self.subject} is disabled because no containers are defined"
             )
