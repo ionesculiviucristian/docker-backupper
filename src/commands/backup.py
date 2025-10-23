@@ -64,7 +64,10 @@ def backup(
         if not ftp_only and not rsync_only:
             for backupper in backuppers:
                 backupper_instance = backupper(app)
-                if not backupper_instance.is_backup_disabled() and backupper_instance.backup():
+                if backupper_instance.is_backup_disabled():
+                    app.notify_manager.send_warning(f"Backing up {backupper_instance.subject} is disabled")
+                    continue
+                if backupper_instance.backup():
                     cleaner_paths.append(backupper_instance.config["local_storage_path"])
 
         if ftp or ftp_only:
