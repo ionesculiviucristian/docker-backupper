@@ -33,7 +33,7 @@ class Postgres(Backupper[TypeConfigContainerPostgres]):
 
             if databases_count == 0:
                 self.app.notify_manager.send_warning(f"No databases found in {container['name']} container", True)
-                return True
+                return False
 
             self.app.notify_manager.send_info(
                 f"Found {databases_count} databases in {container['name']} container", True

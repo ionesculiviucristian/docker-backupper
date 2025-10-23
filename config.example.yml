@@ -7,11 +7,13 @@ container_types:
   mongo:
     storage_path: "~/Backups/docker/local/mongo"
   mysql:
-    storage_path: "~/Backups/docker/local/mongo"
+    storage_path: "~/Backups/docker/local/mysql"
   postgres:
     storage_path: "~/Backups/docker/local/postgres"
   rabbitmq:
     storage_path: "~/Backups/docker/local/rabbitmq"
+  redis:
+    storage_path: "~/Backups/docker/local/redis"
 containers:
   - name: "dev-gitlab-1"
     type: "gitlab"
@@ -24,22 +26,26 @@ containers:
   - name: "dev-mongo-1"
     type: "mongo"
     config:
-      username: "1q2w3e4r5t6y"
-      password: "developer"
+      username: "developer"
+      password: "1q2w3e4r5t6y"
   - name: "dev-mysql-1"
     type: "mysql"
     config:
-      username: "1q2w3e4r5t6y"
-      password: "developer"
+      username: "developer"
+      password: "1q2w3e4r5t6y"
   - name: "dev-postgres-1"
     type: "postgres"
     config:
-      username: "1q2w3e4r5t6y"
-      password: "developer"
+      username: "developer"
+      password: "1q2w3e4r5t6y"
   - name: "dev-rabbitmq-1"
     type: "rabbitmq"
     config:
       volume: "dev_rabbitmq-data"
+  - name: "dev-redis-1"
+    type: "redis"
+    config:
+      password: "1q2w3e4r5t6y"
 logs:
   level: "INFO"
   path: "/tmp"

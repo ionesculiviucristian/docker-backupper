@@ -92,6 +92,10 @@ class TypeConfigContainerGeneric(TypedDict, Generic[GenericConfigContainerType, 
     config: GenericConfigContainerConfig
 
 
+class TypeConfigContainerRedisConfig(TypedDict):
+    password: str
+
+
 class TypeConfigContainerRabbitmqConfig(TypedDict):
     volume: str
 
@@ -121,21 +125,23 @@ class TypeConfigContainerGitlabConfig(TypedDict):
     pass
 
 
-TypeConfigContainerRabbitmq = TypeConfigContainerGeneric[Literal["rabbitmq"], TypeConfigContainerRabbitmqConfig]
-TypeConfigContainerPostgres = TypeConfigContainerGeneric[Literal["postgres"], TypeConfigContainerPostgresConfig]
-TypeConfigContainerMysql = TypeConfigContainerGeneric[Literal["mysql"], TypeConfigContainerMysqlConfig]
-TypeConfigContainerMongo = TypeConfigContainerGeneric[Literal["mongo"], TypeConfigContainerMongoConfig]
-TypeConfigContainerMinio = TypeConfigContainerGeneric[Literal["minio"], TypeConfigContainerMinioConfig]
 TypeConfigContainerGitlab = TypeConfigContainerGeneric[Literal["gitlab"], TypeConfigContainerGitlabConfig]
+TypeConfigContainerMinio = TypeConfigContainerGeneric[Literal["minio"], TypeConfigContainerMinioConfig]
+TypeConfigContainerMongo = TypeConfigContainerGeneric[Literal["mongo"], TypeConfigContainerMongoConfig]
+TypeConfigContainerMysql = TypeConfigContainerGeneric[Literal["mysql"], TypeConfigContainerMysqlConfig]
+TypeConfigContainerPostgres = TypeConfigContainerGeneric[Literal["postgres"], TypeConfigContainerPostgresConfig]
+TypeConfigContainerRabbitmq = TypeConfigContainerGeneric[Literal["rabbitmq"], TypeConfigContainerRabbitmqConfig]
+TypeConfigContainerRedis = TypeConfigContainerGeneric[Literal["redis"], TypeConfigContainerRedisConfig]
 
 TypeConfigContainers = Union[
+    None,
     TypeConfigContainerGitlab,
     TypeConfigContainerMinio,
     TypeConfigContainerMongo,
     TypeConfigContainerMysql,
     TypeConfigContainerPostgres,
     TypeConfigContainerRabbitmq,
-    None,
+    TypeConfigContainerRedis,
 ]
 
 
@@ -150,6 +156,7 @@ class TypeConfigContainerTypes(TypedDict):
     mysql: TypeConfigContainerType
     postgres: TypeConfigContainerType
     rabbitmq: TypeConfigContainerType
+    redis: TypeConfigContainerType
 
 
 class TypeConfig(TypedDict):

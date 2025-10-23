@@ -1,12 +1,17 @@
 import json
 import time
-from typing import Any, List, Mapping
+from typing import Any, List, Mapping, TypedDict
 
 import requests
 
 from src.loggers.LogManager import LogManager
 from src.notifiers.Notifier import Notifier, TypeContructorHelpersParam
 from src.typehints import TypeConfigNotifierMattermost
+
+
+class TypeClearMessagesReturn(TypedDict):
+    failed: int
+    succeeded: int
 
 
 class Mattermost(Notifier[TypeConfigNotifierMattermost]):
@@ -18,11 +23,13 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
         super().__init__(config, log_manager, helpers)
         self.deletable_posts = []
 
-    def clear_messages(self) -> bool:
+    def clear_messages(self) -> TypeClearMessagesReturn | None:
+        succeeded = 0
+        failed = 0
         try:
-            page = 1
+            page = 0
             while True:
-                self.log_manager.info(f"Deleting posts from page {page}")
+                self.log_manager.info(f"Reading posts from page {page}")
 
                 posts = self.__get_posts(page, 100)
 
@@ -40,14 +47,18 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
                     headers=self.__get_headers(),
                 )
                 if response.status_code != 200:
+                    failed += 1
                     self.log_manager.warning(f"Failed to delete post {deletable_post}: {response.text}")
                 else:
+                    succeeded += 1
                     self.log_manager.debug(f"Deleted post {deletable_post}")
 
-            return True
+            self.log_manager.debug(f"Deleted {succeeded} and failed {failed}")
+
+            return {"failed": failed, "succeeded": succeeded}
         except Exception as e:
             self.log_manager.error(f"Unable to get posts: {str(e)}")
-            return False
+            return None
 
     def send_log_file(self, path: str) -> bool:
         try:
@@ -118,5 +129,5 @@ class Mattermost(Notifier[TypeConfigNotifierMattermost]):
 
     def __is_post_deletable(self, created_at: int) -> bool:
         now = int(time.time() * 1000)
-        post_age = (now - created_at) / 24 * 60 * 60 * 1000
+        post_age = (now - created_at) / (24 * 60 * 60 * 1000)
         return post_age > self.config["retention_days"]

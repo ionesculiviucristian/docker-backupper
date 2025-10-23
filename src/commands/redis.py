@@ -2,11 +2,11 @@ import click
 
 from src.App import app
 from src.backuppers.Backupper import Backupper
-from src.backuppers.databases.Postgres import Postgres
+from src.backuppers.databases.Redis import Redis
 from src.commands.run_ftp_cleaner import run_ftp_cleaner
 from src.commands.run_local_cleaner import run_local_cleaner
 from src.commands.run_rsync_cleaner import run_rsync_cleaner
-from src.typehints import TypeConfigContainerPostgres
+from src.typehints import TypeConfigContainerRedis
 
 
 @click.command()
@@ -17,7 +17,7 @@ from src.typehints import TypeConfigContainerPostgres
 @click.option("--rsync-clean-only", is_flag=True)
 @click.option("--rsync-only", is_flag=True)
 @click.option("--rsync", is_flag=True)
-def postgres(
+def redis(
     clean_only: bool,
     ftp_clean_only: bool,
     ftp_only: bool,
@@ -28,11 +28,11 @@ def postgres(
 ) -> None:
     if clean_only or ftp_clean_only or rsync_clean_only:
         if clean_only:
-            run_local_cleaner([Postgres(app).config["local_storage_path"]])
+            run_local_cleaner([Redis(app).config["local_storage_path"]])
         if ftp_clean_only:
-            run_ftp_cleaner([Postgres(app).config["mirror_storage_path"]])
+            run_ftp_cleaner([Redis(app).config["mirror_storage_path"]])
         if rsync_clean_only:
-            run_rsync_cleaner([Postgres(app).config["mirror_storage_path"]])
+            run_rsync_cleaner([Redis(app).config["mirror_storage_path"]])
         return
 
-    return Backupper[TypeConfigContainerPostgres].run_backupper(app, ftp_only, ftp, rsync_only, rsync, Postgres(app))
+    return Backupper[TypeConfigContainerRedis].run_backupper(app, ftp_only, ftp, rsync_only, rsync, Redis(app))

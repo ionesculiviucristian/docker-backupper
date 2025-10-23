@@ -29,10 +29,8 @@ class LocalCleaner(Cleaner[TypeConfig]):
 
         if os.path.exists(path):
             for folder in os.listdir(path):
-                folder_path = os.path.join(path, folder)
-
-                if os.path.isdir(folder_path):
-                    folders.append(folder_path)
+                if os.path.isdir(os.path.join(path, folder)):
+                    folders.append(folder)
 
         return self.get_removable_folders(path, folders, retention_days)
 
@@ -40,7 +38,7 @@ class LocalCleaner(Cleaner[TypeConfig]):
         removable_paths = self.__get_removable_folders(path, retention_days)
 
         if len(removable_paths) == 0:
-            self.app.notify_manager.send_action(f"No backups older than {retention_days} days found in {path}", True)
+            self.app.notify_manager.send_info(f"No backups older than {retention_days} days found in {path}", True)
             return
 
         self.app.notify_manager.send_action(f"Removing backups older than {retention_days} days from {path}", True)

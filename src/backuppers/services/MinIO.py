@@ -33,7 +33,7 @@ class MinIO(Backupper[TypeConfigContainerMinio]):
 
             if buckets_count == 0:
                 self.app.notify_manager.send_warning(f"No buckets found in {container['name']} container", True)
-                return True
+                return False
 
             self.app.notify_manager.send_info(f"Found {buckets_count} buckets in {container['name']} container", True)
 

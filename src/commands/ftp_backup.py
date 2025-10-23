@@ -5,6 +5,7 @@ from src.backuppers.Backupper import Backupper
 from src.backuppers.databases.Mongo import Mongo
 from src.backuppers.databases.MySQL import MySQL
 from src.backuppers.databases.Postgres import Postgres
+from src.backuppers.databases.Redis import Redis
 from src.backuppers.mounts.Bind import Bind
 from src.backuppers.mounts.Volume import Volume
 from src.backuppers.services.GitLab import GitLab
@@ -20,7 +21,7 @@ def ftp_backup() -> List[str]:
 
     cleanable_paths: Set[str] = set()
 
-    backuppers: List[Type[Backupper[Any]]] = [Bind, Volume, GitLab, MinIO, Mongo, MySQL, Postgres, RabbitMQ]
+    backuppers: List[Type[Backupper[Any]]] = [Bind, Volume, GitLab, MinIO, Mongo, MySQL, Postgres, RabbitMQ, Redis]
 
     for ftp_mirror in app.config["mirrors"]["ftp"]:
         ftp_client = FTP(app, ftp_mirror)

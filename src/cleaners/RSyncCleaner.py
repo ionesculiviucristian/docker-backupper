@@ -30,7 +30,7 @@ class RSyncCleaner(Cleaner[TypeConfigMirrorRSync]):
         removable_paths = self.get_removable_folders(path, self.rsync.list_items(path), retention_days)
 
         if len(removable_paths) == 0:
-            self.app.notify_manager.send_action(f"No backups older than {retention_days} days found in {path}", True)
+            self.app.notify_manager.send_info(f"No backups older than {retention_days} days found in {path}", True)
             return
 
         self.app.notify_manager.send_action(f"Removing backups older than {retention_days} days from {path}", True)

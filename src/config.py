@@ -34,6 +34,7 @@ default_config: TypeConfig = {
         "mongo": {"storage_path": ""},
         "mysql": {"storage_path": ""},
         "postgres": {"storage_path": ""},
+        "redis": {"storage_path": ""},
         "rabbitmq": {"storage_path": ""},
     },
     "containers": [],

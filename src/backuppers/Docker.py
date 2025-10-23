@@ -1,5 +1,5 @@
 import re
-from typing import Callable, List, Optional, Tuple, cast
+from typing import Callable, Dict, List, Literal, Optional, Tuple, TypedDict, cast
 
 import docker as docker_lib
 from docker import DockerClient
@@ -7,6 +7,25 @@ from docker.models.containers import Container
 from docker.types.services import Mount
 
 from src.App import app
+
+
+class TypeDockerContainersPruneResult(TypedDict):
+    ContainersDeleted: List[str] | None
+    SpaceReclaimed: int
+
+
+class TypeDockerImagesPruneResult(TypedDict):
+    ImagesDeleted: List[Dict[Literal["Deleted"] | Literal["Untagged"], str]] | None
+    SpaceReclaimed: int
+
+
+class TypeDockerNetworksPruneResult(TypedDict):
+    NetworksDeleted: List[str] | None
+
+
+class TypeDockerVolumesPruneResult(TypedDict):
+    VolumesDeleted: List[str]
+    SpaceReclaimed: int
 
 
 class Docker:
