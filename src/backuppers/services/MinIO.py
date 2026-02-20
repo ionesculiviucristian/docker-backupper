@@ -58,6 +58,7 @@ class MinIO(Backupper[TypeConfigContainerMinio]):
         command = f"""
         bash -c '
             mc alias set localminio "{container['config']['url']}" "{container['config']['access_key']}" "{container['config']['secret_key']}" > /dev/null;
+            mkdir -p {container_backup_file_path};
             mc mirror --quiet localminio/{bucket} {container_backup_file_path};
         '
         """  # noqa
