@@ -52,6 +52,8 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
         if returncode != 0:
             raise Exception(f"Unable to copy Gitlab config from {container.name} container to {backup_path}")
 
+        self.app.run_command(f'chmod -R 775 "{backup_path}"')
+
         exit_code, _ = docker.container_exec(
             container, '/bin/bash -c "rm -f /etc/gitlab/config_backup/*.tar"', user="root"
         )
@@ -66,6 +68,8 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
         returncode, _, _ = self.app.run_command(f'docker cp "{container.id}:/var/opt/gitlab/backups/" {backup_path}')
         if returncode != 0:
             raise Exception(f"Unable to copy Gitlab data from {container.name} container to {backup_path}")
+
+        self.app.run_command(f'chmod -R 775 "{backup_path}/backups"')
 
         exit_code, _ = docker.container_exec(
             container, '/bin/bash -c "rm -f /var/opt/gitlab/backups/*.tar"', user="root"

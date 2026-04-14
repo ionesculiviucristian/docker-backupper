@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Generic, List, TypedDict, TypeVar, cast
+from typing import Callable, Generic, List, Set, TypedDict, TypeVar, cast
 
 from docker.models.containers import Container
 
@@ -106,9 +106,16 @@ class Backupper(ABC, Generic[T]):
             f"Started backup at {app.get_current_datetime()} on {app.hostname} {app.external_ip}"
         )
 
+        transferred_paths: Set[str] = set()
+
         for _backupper in backuppers:
             if not ftp_only and not rsync_only:
                 _backupper.backup()
+
+            if _backupper.config["local_storage_path"] in transferred_paths:
+                continue
+
+            transferred_paths.add(_backupper.config["local_storage_path"])
 
             if ftp or ftp_only:
                 for ftp_mirror in app.config["mirrors"]["ftp"]:

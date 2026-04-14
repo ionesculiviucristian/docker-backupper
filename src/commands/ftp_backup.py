@@ -29,8 +29,15 @@ def ftp_backup() -> List[str]:
 
         app.notify_manager.send_connect(f"Connected to {ftp_mirror['host']}")
 
+        transferred_paths: Set[str] = set()
+
         for backupper in backuppers:
             backupper_instance = backupper(app)
+
+            if backupper_instance.config["local_storage_path"] in transferred_paths:
+                continue
+
+            transferred_paths.add(backupper_instance.config["local_storage_path"])
 
             app.notify_manager.send_action(f"Transferring {backupper_instance.subject}")
 
