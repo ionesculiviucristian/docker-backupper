@@ -61,6 +61,8 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
             self.app.log_manager.warning(f"Unable to remove GitLab config backups from {container.name} container")
 
     def __backup_data(self, container: Container, backup_path: str) -> None:
+        self.__clear_gitlab_backups(container)
+
         exit_code, _ = docker.container_exec(container, "gitlab-backup")
         if exit_code != 0:
             raise Exception("Unable to backup Gitlab data")
@@ -71,6 +73,9 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
 
         self.app.run_command(f'chmod -R 775 "{backup_path}/backups"')
 
+        self.__clear_gitlab_backups(container)
+
+    def __clear_gitlab_backups(self, container: Container):
         exit_code, _ = docker.container_exec(
             container, '/bin/bash -c "rm -f /var/opt/gitlab/backups/*.tar"', user="root"
         )

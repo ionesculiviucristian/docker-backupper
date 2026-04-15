@@ -1,4 +1,5 @@
 import os
+import socket
 from ftplib import FTP as FTPlib
 from typing import List
 
@@ -19,6 +20,16 @@ class FTP(Mirror[TypeConfigMirrorFTP]):
     def connect(self) -> None:
         self.client.connect(self.config["host"], int(self.config["config"]["port"]))
         self.client.login(self.config["config"]["username"], self.config["config"]["password"])
+
+        sock = self.client.sock
+        if sock is not None:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+            if hasattr(socket, "TCP_KEEPIDLE"):
+                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 60)
+            if hasattr(socket, "TCP_KEEPINTVL"):
+                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 30)
+            if hasattr(socket, "TCP_KEEPCNT"):
+                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 5)
 
         self.app.log_manager.info(f"Established connection to FTP mirror at {self.config['host']}")
 
