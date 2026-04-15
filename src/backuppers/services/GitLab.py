@@ -27,6 +27,7 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
 
             try:
                 self.__backup_config(docker_container, backup_path)
+                self.__fix_permissions(backup_path)
                 self.app.notify_manager.send_success("GitLab config: backed up successfully", True)
             except Exception as ex:
                 has_errors = True
@@ -34,6 +35,7 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
 
             try:
                 self.__backup_data(docker_container, backup_path)
+                self.__fix_permissions(backup_path)
                 self.app.notify_manager.send_success("GitLab data: backed up successfully", True)
             except Exception as ex:
                 has_errors = True
@@ -52,8 +54,6 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
         if returncode != 0:
             raise Exception(f"Unable to copy Gitlab config from {container.name} container to {backup_path}")
 
-        self.app.run_command(f'chmod -R 775 "{backup_path}"')
-
         exit_code, _ = docker.container_exec(
             container, '/bin/bash -c "rm -f /etc/gitlab/config_backup/*.tar"', user="root"
         )
@@ -71,8 +71,6 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
         if returncode != 0:
             raise Exception(f"Unable to copy Gitlab data from {container.name} container to {backup_path}")
 
-        self.app.run_command(f'chmod -R 775 "{backup_path}/backups"')
-
         self.__clear_gitlab_backups(container)
 
     def __clear_gitlab_backups(self, container: Container):
@@ -81,3 +79,8 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
         )
         if exit_code != 0:
             self.app.log_manager.warning(f"Unable to remove GitLab data backups from {container.name} container")
+
+    def __fix_permissions(self, backup_path: str):
+        self.app.run_command(f'find "{backup_path}/backups" -type d -exec chmod 775 {{}} +')                                                                     
+        self.app.run_command(f'find "{backup_path}/backups" -type f -exec chmod 644 {{}} +') 
+
