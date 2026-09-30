@@ -38,7 +38,7 @@ class Bind(Backupper[None]):
         returncode, _, stderr = self.app.run_command(f'mkdir -p "{backup_path}"')
         if returncode != 0:
             self.app.notify_manager.send_error(stderr)
-            return True
+            return False
 
         self.app.notify_manager.send_action(f"Backing up {self.subject} to {backup_path}")
 

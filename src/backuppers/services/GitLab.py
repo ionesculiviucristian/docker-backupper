@@ -69,6 +69,8 @@ class GitLab(Backupper[TypeConfigContainerGitlab]):
 
         returncode, _, _ = self.app.run_command(f'docker cp "{container.id}:/var/opt/gitlab/backups/" {backup_path}')
         if returncode != 0:
+            self.app.run_command(f'rm -rf "{backup_path}/backups"')
+            self.__clear_gitlab_backups(container)
             raise Exception(f"Unable to copy Gitlab data from {container.name} container to {backup_path}")
 
         self.__clear_gitlab_backups(container)
